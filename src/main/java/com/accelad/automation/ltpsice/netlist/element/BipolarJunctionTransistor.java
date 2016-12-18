@@ -50,11 +50,6 @@ public class BipolarJunctionTransistor implements Element {
         return model;
     }
 
-//    @Override
-//    public String getLetter() {
-//        return "Q";
-//    }
-
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);

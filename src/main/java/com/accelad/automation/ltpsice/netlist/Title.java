@@ -2,7 +2,7 @@ package com.accelad.automation.ltpsice.netlist;
 
 public class Title {
 
-    private String line;
+    private final String line;
 
     public Title(String line) {
         this.line = line;

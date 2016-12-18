@@ -3,13 +3,15 @@ package com.accelad.automation.ltpsice.netlist;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.accelad.automation.ltpsice.netlist.directives.Directive;
 import com.accelad.automation.ltpsice.netlist.element.Element;
 
 public class Netlist {
 
-    private Title title;
+    private Title title = new Title("");
     private List<Element> elements = new ArrayList<>();
     private List<Subcircuit> subcircuits = new ArrayList<>();
+    private List<Directive> directives = new ArrayList<>();
 
     public Title getTitle() {
         return title;
@@ -41,6 +43,18 @@ public class Netlist {
 
     public boolean removeSubCircuit(Subcircuit o) {
         return subcircuits.remove(o);
+    }
+
+    public boolean addDirective(Directive e) {
+        return directives.add(e);
+    }
+
+    public boolean removeDirective(Directive o) {
+        return directives.remove(o);
+    }
+
+    public List<Directive> getDirectives() {
+        return directives;
     }
 
     public void accept(NetlistVisitor visitor) {

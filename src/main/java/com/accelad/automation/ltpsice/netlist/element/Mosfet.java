@@ -4,17 +4,20 @@ import com.accelad.automation.ltpsice.netlist.InstanceName;
 import com.accelad.automation.ltpsice.netlist.Model;
 import com.accelad.automation.ltpsice.netlist.Node;
 
-public  class Diode implements Element {
-    
-    private InstanceName instanceName;
-    private Node anode;
-    private Node cathode;
-    private Model model;
+public class Mosfet implements Element {
 
-    public Diode(InstanceName instanceName, Node anode, Node cathode, Model model) {
+    private final InstanceName instanceName;
+    private final Node drain;
+    private final Node gate;
+    private final Node source;
+    private final Model model;
+
+    public Mosfet(InstanceName instanceName, Node drain, Node gate,
+            Node source, Model model) {
         this.instanceName = instanceName;
-        this.anode = anode;
-        this.cathode = cathode;
+        this.drain = drain;
+        this.gate = gate;
+        this.source = source;
         this.model = model;
     }
 
@@ -23,12 +26,16 @@ public  class Diode implements Element {
         return instanceName;
     }
 
-    public Node getAnode() {
-        return anode;
+    public Node getDrain() {
+        return drain;
     }
 
-    public Node getCathode() {
-        return cathode;
+    public Node getGate() {
+        return gate;
+    }
+
+    public Node getSource() {
+        return source;
     }
 
     public Model getModel() {

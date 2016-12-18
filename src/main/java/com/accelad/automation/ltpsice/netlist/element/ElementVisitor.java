@@ -7,6 +7,8 @@ public interface ElementVisitor {
 
     void visit(BipolarJunctionTransistor c);
 
+    void visit(Mosfet mosfet);
+
     void visit(Capacitor c);
 
     void visit(CurrentControlledCurrentSource c);

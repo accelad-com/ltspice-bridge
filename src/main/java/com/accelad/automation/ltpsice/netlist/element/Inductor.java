@@ -35,15 +35,9 @@ public  class Inductor implements Element {
         return value;
     }
 
-//    @Override
-//    public String getLetter() {
-//        return "L";
-//    }
-
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
-        
     }
 
 }

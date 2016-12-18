@@ -49,15 +49,9 @@ public  class VoltageControlledCurrentSource implements Element {
         return gain;
     }
 
-//    @Override
-//    public String getLetter() {
-//        return "G";
-//    }
-
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
-        
     }
 
 }

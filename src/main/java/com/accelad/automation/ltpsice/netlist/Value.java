@@ -2,26 +2,26 @@ package com.accelad.automation.ltpsice.netlist;
 
 public class Value {
 
-    private String value;
+    private final String valueAsText;
 
     public Value(String value) {
-        this.value = value;
+        this.valueAsText = value;
     }
 
     public String getValue() {
-        return value;
+        return valueAsText;
     }
 
     @Override
     public String toString() {
-        return value;
+        return valueAsText;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        result = prime * result + ((valueAsText == null) ? 0 : valueAsText.hashCode());
         return result;
     }
 
@@ -34,10 +34,10 @@ public class Value {
         if (getClass() != obj.getClass())
             return false;
         Value other = (Value) obj;
-        if (value == null) {
-            if (other.value != null)
+        if (valueAsText == null) {
+            if (other.valueAsText != null)
                 return false;
-        } else if (!value.equals(other.value))
+        } else if (!valueAsText.equals(other.valueAsText))
             return false;
         return true;
     }

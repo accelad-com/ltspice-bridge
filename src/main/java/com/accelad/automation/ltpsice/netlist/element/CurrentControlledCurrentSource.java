@@ -42,16 +42,9 @@ public  class CurrentControlledCurrentSource implements Element {
         return gain;
     }
 
-
-//    @Override
-//    public String getLetter() {
-//        return "F";
-//    }
-
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
-        
     }
 
 }

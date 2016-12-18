@@ -35,11 +35,6 @@ public  class Resistor implements Element {
         return value;
     }
 
-//    @Override
-//    public String getLetter() {
-//        return "R";
-//    }
-
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);

@@ -36,15 +36,9 @@ public  class BehaviouralVoltageSource implements Element {
         return value;
     }
 
-//    @Override
-//    public String getLetter() {
-//        return "B";
-//    }
-
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
-        
     }
 
 }

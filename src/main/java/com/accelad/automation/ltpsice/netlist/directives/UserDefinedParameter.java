@@ -2,12 +2,12 @@ package com.accelad.automation.ltpsice.netlist.directives;
 
 import com.accelad.automation.ltpsice.netlist.Value;
 
-public class Param implements Directive {
+public class UserDefinedParameter implements Directive {
 
     private String name;
     private Value value;
 
-    public Param(String name, Value value) {
+    public UserDefinedParameter(String name, Value value) {
         this.name = name;
         this.value = value;
     }

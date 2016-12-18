@@ -19,11 +19,6 @@ public  class IndependentCurrentSource implements Element {
         this.value = value;
     }
 
-//    @Override
-//    public String getLetter() {
-//        return "I";
-//    }
-
     @Override
     public InstanceName getInstanceName() {
         return instanceName;
@@ -44,7 +39,6 @@ public  class IndependentCurrentSource implements Element {
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
-        
     }
 
 }

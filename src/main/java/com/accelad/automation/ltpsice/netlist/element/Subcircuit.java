@@ -11,11 +11,14 @@ public  class Subcircuit implements Element {
     private final InstanceName instanceName;
     private final List<Node> nodes;
     private final Model model;
+    private final List<ElementParameter> parameters;
 
-    public Subcircuit(InstanceName instanceName, List<Node> nodes, Model model) {
+    public Subcircuit(InstanceName instanceName, List<Node> nodes, Model model,
+            List<ElementParameter> parameters) {
         this.instanceName = instanceName;
         this.model = model;
         this.nodes = nodes;
+        this.parameters = parameters;
     }
 
     @Override
@@ -31,15 +34,13 @@ public  class Subcircuit implements Element {
         return model;
     }
 
-//    @Override
-//    public String getLetter() {
-//        return "X";
-//    }
+    public List<ElementParameter> getParameters() {
+        return parameters;
+    }
 
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
-        
     }
 
 }

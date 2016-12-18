@@ -2,7 +2,7 @@ package com.accelad.automation.ltpsice.netlist;
 
 public class Model {
 
-    private String value;
+    private final String value;
 
     public Model(String value) {
         this.value = value;

@@ -7,10 +7,10 @@ import com.accelad.automation.ltpsice.netlist.element.Element;
 
 public class Subcircuit {
 
-    private String name;
-    private List<Node> nodes;
-    private List<Element> elements;
-    private List<Directive> directives;
+    private final String name;
+    private final List<Node> nodes;
+    private final List<Element> elements;
+    private final List<Directive> directives;
 
 
     public Subcircuit(String name, List<Node> nodes, List<Element> elements,

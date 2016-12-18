@@ -37,11 +37,6 @@ public  class CurrentControlledVoltageSource implements Element {
         return gain;
     }
 
-//    @Override
-//    public String getLetter() {
-//        return "H";
-//    }
-
     @Override
     public InstanceName getInstanceName() {
         return instanceName;
@@ -50,7 +45,6 @@ public  class CurrentControlledVoltageSource implements Element {
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
-        
     }
 
 }

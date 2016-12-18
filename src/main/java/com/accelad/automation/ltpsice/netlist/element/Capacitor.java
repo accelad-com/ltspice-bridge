@@ -35,12 +35,6 @@ public class Capacitor implements Element {
         return value;
     }
 
-//
-//    @Override
-//    public String getLetter() {
-//        return "C";
-//    }
-
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
