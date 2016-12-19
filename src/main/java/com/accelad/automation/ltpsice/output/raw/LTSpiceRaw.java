@@ -1,4 +1,4 @@
-package com.accelad.automation.ltpsice.output;
+package com.accelad.automation.ltpsice.output.raw;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,24 +8,20 @@ public class LTSpiceRaw {
     private final String title;
     private final Date date;
     private final String plotName;
-    private final String flags;
-    private final int variableCount;
-    private final int pointCount;
+    private final ListOfFlags flags;
     private final double offset;
     private final String command;
-    private final List<Variable> variables = new ArrayList<>();
-    private final List<Point> points = new ArrayList<>();
+    private final ListOfTraces traces;
 
-    private LTSpiceRaw(String title, Date date, String plotName, String flags, int variableCount,
-            int pointCount, double offset, String command) {
+    private LTSpiceRaw(String title, Date date, String plotName, ListOfFlags flags,
+            double offset, String command, ListOfTraces traces) {
         this.title = title;
         this.date = date;
         this.plotName = plotName;
         this.flags = flags;
-        this.variableCount = variableCount;
-        this.pointCount = pointCount;
         this.offset = offset;
         this.command = command;
+        this.traces = traces;
     }
 
     public String getTitle() {
@@ -40,16 +36,8 @@ public class LTSpiceRaw {
         return plotName;
     }
 
-    public String getFlags() {
+    public ListOfFlags getFlags() {
         return flags;
-    }
-
-    public int getVariableCount() {
-        return variableCount;
-    }
-
-    public int getPointCount() {
-        return pointCount;
     }
 
     public double getOffset() {
@@ -60,8 +48,8 @@ public class LTSpiceRaw {
         return command;
     }
 
-    public List<Variable> getVariables() {
-        return variables;
+    public ListOfTraces getTraces() {
+        return traces;
     }
 
     public static Builder builder() {
@@ -69,18 +57,16 @@ public class LTSpiceRaw {
     }
 
     public static class Builder {
-
-
         private String title;
         private Date date;
         private String plotName;
-        private String flags;
+        private ListOfFlags flags;
         private int variableCount;
         private int pointCount;
         private double offset;
         private String command;
-        private final List<Variable> variables = new ArrayList<>();
-        private final List<Point> points = new ArrayList<>();
+        private final List<Signal> signals = new ArrayList<>();
+        private final List<List<Double>> values = new ArrayList<>();
 
         public Builder withTitle(String title) {
             this.title = title;
@@ -97,7 +83,7 @@ public class LTSpiceRaw {
             return this;
         }
 
-        public Builder withFlags(String flags) {
+        public Builder withFlags(ListOfFlags flags) {
             this.flags = flags;
             return this;
         }
@@ -122,23 +108,38 @@ public class LTSpiceRaw {
             return this;
         }
 
-        public Builder withVariable(Variable variable) {
-            this.variables.add(variable);
+        public Builder withSignal(Signal signal) {
+            this.signals.add(signal);
             return this;
         }
 
-        public Builder withPoint(Point point) {
-            this.points.add(point);
+        public int getVariableCount() {
+            return variableCount;
+        }
+
+        public int getPointCount() {
+            return pointCount;
+        }
+
+        public Builder withPoint(List<Double> list) {
+            this.values.add(list);
             return this;
         }
 
         public LTSpiceRaw build() {
-            LTSpiceRaw raw = new LTSpiceRaw(title, date, plotName,
-                    flags, variableCount, pointCount, offset,
-                    command);
-            raw.variables.addAll(variables);
-            raw.points.addAll(points);
-            return raw;
+            double[][] valuesArray = new double[variableCount][pointCount];
+
+            for (int i = 0; i < values.size(); i++) {
+                List<Double> listOfValue = values.get(i);
+                for (int j = 0; j < listOfValue.size(); j++) {
+                    valuesArray[j][i] = listOfValue.get(j);
+                }
+            }
+
+            ListOfTraces traces = ListOfTraces.buildFromSignals(signals, valuesArray);
+
+            return new LTSpiceRaw(title, date, plotName,
+                    flags, offset, command, traces);
         }
 
     }

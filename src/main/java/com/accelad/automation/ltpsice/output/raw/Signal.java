@@ -1,12 +1,12 @@
-package com.accelad.automation.ltpsice.output;
+package com.accelad.automation.ltpsice.output.raw;
 
-public class Variable {
+public class Signal {
     private final int index;
     private final String fullName;
     private final String name;
     private final String type;
 
-    public Variable(int index, String fullName, String name, String type) {
+    public Signal(int index, String fullName, String name, String type) {
         this.index = index;
         this.fullName = fullName;
         this.name = name;
@@ -31,7 +31,7 @@ public class Variable {
 
     @Override
     public String toString() {
-        return "Variable [index=" + index + ", fullName=" + fullName + ", name=" + name + ", type="
+        return "Signal [index=" + index + ", fullName=" + fullName + ", name=" + name + ", type="
                 + type + "]";
     }
 
