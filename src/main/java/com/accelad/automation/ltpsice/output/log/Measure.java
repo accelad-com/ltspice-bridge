@@ -1,4 +1,4 @@
-package com.accelad.automation.ltpsice.output;
+package com.accelad.automation.ltpsice.output.log;
 
 public class Measure {
 

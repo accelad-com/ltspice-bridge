@@ -1,10 +1,14 @@
-package com.accelad.automation.ltpsice.output;
+package com.accelad.automation.ltpsice.output.log;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Yoann
+ *
+ */
 public class Log {
 
     private String title;
@@ -29,6 +33,14 @@ public class Log {
     private String compiler1;
     private String compiler2;
 
+    private boolean directNewtonIterationSuccess = false;
+    private boolean opPointFoundByInspection = false;
+    private List<String> warnings = new ArrayList<>();
+    private List<HeightenedDefCon> defCons = new ArrayList<>();
+    private boolean skipOperatingPoint = false;
+    private String threadVector;
+    private GminStepping gminStepping = null;
+
     public String getTitle() {
         return title;
     }
@@ -47,6 +59,10 @@ public class Log {
 
     public List<Measure> getMeasures() {
         return measures;
+    }
+
+    public void addMeasure(Measure measure) {
+        measures.add(measure);
     }
 
     public void setMeasures(List<Measure> measures) {
@@ -179,5 +195,59 @@ public class Log {
         this.compiler2 = compiler2;
     }
 
+    public void setDirectNewtonIterationSuccess(boolean directNewtonIterationSuccess) {
+        this.directNewtonIterationSuccess = directNewtonIterationSuccess;
+    }
 
+    public boolean isDirectNewtonIterationSuccess() {
+        return directNewtonIterationSuccess;
+    }
+
+    public void setOpPointFoundByInspection(boolean opPointFoundByInspection) {
+        this.opPointFoundByInspection = opPointFoundByInspection;
+    }
+
+    public boolean isOpPointFoundByInspection() {
+        return opPointFoundByInspection;
+    }
+
+    public void addWaring(String warning) {
+        warnings.add(warning);
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
+    }
+
+    public void addDefCon(HeightenedDefCon defcon) {
+        defCons.add(defcon);
+    }
+
+    public List<HeightenedDefCon> getDefCons() {
+        return defCons;
+    }
+
+    public void setSkipOperatingPoint(boolean skipOperatingPoint) {
+        this.skipOperatingPoint = skipOperatingPoint;
+    }
+
+    public boolean isSkipOperatingPoint() {
+        return skipOperatingPoint;
+    }
+
+    public void setThreadVector(String threadVector) {
+        this.threadVector = threadVector;
+    }
+
+    public String getThreadVector() {
+        return threadVector;
+    }
+
+    public void setGminStepping(GminStepping gminStepping) {
+        this.gminStepping = gminStepping;
+    }
+
+    public Optional<GminStepping> getGminStepping() {
+        return Optional.ofNullable(gminStepping);
+    }
 }
