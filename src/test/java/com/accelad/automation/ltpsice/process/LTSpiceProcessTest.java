@@ -18,12 +18,12 @@ public class LTSpiceProcessTest {
     @Test
     public void shouldReturnAListWithTheCommands() {
         File circuit = new File("C:\temp\test.net");
-        LTSpiceExecutor executor = mock(LTSpiceExecutor.class);
-        when(executor.getAbsolutePath()).thenReturn(EXPECTED_PATH);
+        ExecutableFile executableFile = mock(ExecutableFile.class);
+        when(executableFile.getAbsolutePath()).thenReturn(EXPECTED_PATH);
 
-        LTSpiceProcess process = new LTSpiceProcess(executor, circuit);
+        LTSpiceProcess process = new LTSpiceProcess(executableFile, circuit);
 
-        List<String> commands = process.createProcessCommands(executor, circuit);
+        List<String> commands = process.createProcessCommands(executableFile, circuit);
         assertEquals(EXPECTED_NUMBER_OF_COMMANDS, commands.size());
         assertEquals(EXPECTED_PATH, commands.get(0));
         assertEquals(BATCH_MODE_FLAG, commands.get(1));

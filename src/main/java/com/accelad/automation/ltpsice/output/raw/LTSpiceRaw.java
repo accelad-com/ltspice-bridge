@@ -1,6 +1,7 @@
 package com.accelad.automation.ltpsice.output.raw;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,17 @@ public class LTSpiceRaw {
     private final String command;
     private final ListOfTraces traces;
 
-    private LTSpiceRaw(String title, Date date, String plotName, ListOfFlags flags,
+    public LTSpiceRaw() {
+        traces = new ListOfTraces(Collections.emptyList());
+        title = "";
+        date = null;
+        plotName = "";
+        flags = new ListOfFlags();
+        offset = 0;
+        command = "";
+    }
+
+    public LTSpiceRaw(String title, Date date, String plotName, ListOfFlags flags,
             double offset, String command, ListOfTraces traces) {
         this.title = title;
         this.date = date;

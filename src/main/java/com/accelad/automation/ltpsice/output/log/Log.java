@@ -1,6 +1,7 @@
 package com.accelad.automation.ltpsice.output.log;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ public class Log {
     private String title;
     private String info;
 
-    private List<Measure> measures = new ArrayList<>();
+    private ListOfMeasures measures = new ListOfMeasures();
 
     private Date date;
     private double elapsedTime;
@@ -57,22 +58,16 @@ public class Log {
         this.info = info;
     }
 
-    public List<Measure> getMeasures() {
-        return measures;
+    public Collection<Measure> getMeasures() {
+        return measures.getMeasures();
     }
 
     public void addMeasure(Measure measure) {
-        measures.add(measure);
-    }
-
-    public void setMeasures(List<Measure> measures) {
-        this.measures = measures;
+        measures.addMeasure(measure);
     }
 
     public Optional<Measure> findMeasureByName(String name) {
-        return measures.stream()
-                .filter(meas -> name.equals(meas.getName()))
-                .findAny();
+        return measures.getMeasure(name);
     }
 
     public Date getDate() {

@@ -15,35 +15,57 @@ public class LTSpiceExecutor {
     private static final Logger LOGGER = LoggerFactory.getLogger(LTSpiceExecutor.class);
     private static final String CIRCUIT_FILE_NAME = "circuit.net";
     private static final File TEMP_DIR = new File(SystemUtils.JAVA_IO_TMPDIR);
-    private File file;
+    private ExecutableFile executable;
 
-    public LTSpiceExecutor(File file) {
-        this.file = file;
+    public LTSpiceExecutor(ExecutableFile executable) {
+        this.executable = executable;
     }
 
-    public String getAbsolutePath() {
-        return file.getAbsolutePath();
+    public ExecutableFile getExecutable() {
+        return executable;
     }
 
-    public LTSpiceState runSimulation(Netlist netlist) {
+    public ExecutorResult runSimulation(Netlist netlist) {
+        File circuitPath = null;
+        try {
+            circuitPath = File.createTempFile("circuit", ".net", TEMP_DIR);
+        } catch (IOException e1) {
+            LOGGER.error("Impossible to save the circuit on the drive", e1);
+            return new ExecutorResult(LTSpiceState.SIMULATION_FAILED);
+        }
 
         try {
-            File circuitPath = File.createTempFile("circuit", ".net", TEMP_DIR);
             saveNetlistToFile(netlist, circuitPath);
-            LTSpiceProcess process = new LTSpiceProcess(this, circuitPath);
+            LTSpiceProcess process = new LTSpiceProcess(executable, circuitPath);
             LTSpiceState result = process.run();
 
             if (result == LTSpiceState.SIMULATION_OK) {
-                circuitPath.delete();
+                // circuitPath.delete();
             }
             else {
                 saveNetlistForDebug(netlist);
             }
-            return result;
+            return buildResult(result, circuitPath);
         } catch (IOException e) {
             LOGGER.warn("Impossible to save the netlist in the file.", e);
         }
-        return LTSpiceState.SIMULATION_FAILED;
+        return buildResult(LTSpiceState.SIMULATION_FAILED, circuitPath);
+    }
+
+    private ExecutorResult buildResult(LTSpiceState result, File circuitFile) {
+        File logFile = getLogFile(circuitFile);
+        File rawFile = getRawFile(circuitFile);
+        return new ExecutorResult(result, logFile, rawFile);
+    }
+
+    private File getLogFile(File circuitFile) {
+        String logFileName = circuitFile.getName().replace(".net", ".log");
+        return new File(circuitFile.getParentFile(), logFileName);
+    }
+
+    private File getRawFile(File circuitFile) {
+        String rawFileName = circuitFile.getName().replace(".net", ".raw");
+        return new File(circuitFile.getParentFile(), rawFileName);
     }
 
     private void saveNetlistForDebug(Netlist netlist) throws IOException {

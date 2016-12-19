@@ -10,13 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LTSpiceProcess {
-    private static final String BATCH_MODE_FLAG = "-b";
     private static final int PROCESS_STATUS_OK = 0;
     private static final Logger LOGGER = LoggerFactory.getLogger(LTSpiceProcess.class);
     private final ProcessBuilder processBuilder;
 
-    public LTSpiceProcess(LTSpiceExecutor executor, File circuit) {
-        List<String> commands = createProcessCommands(executor, circuit);
+    public LTSpiceProcess(ExecutableFile executableFile, File circuit) {
+        List<String> commands = createProcessCommands(executableFile, circuit);
         processBuilder = new ProcessBuilder(commands);
         processBuilder.inheritIO();
     }
@@ -48,9 +47,9 @@ public class LTSpiceProcess {
         return Arrays.asList(new BatchModeFlag());
     }
 
-    List<String> createProcessCommands(LTSpiceExecutor executor, File circuit) {
+    List<String> createProcessCommands(ExecutableFile executableFile, File circuit) {
         List<String> commands = new ArrayList<>();
-        commands.add(executor.getAbsolutePath());
+        commands.add(executableFile.getAbsolutePath());
 
         getCommandLineSwitches().stream()
                 .map(CommandLineSwitch::toString)
