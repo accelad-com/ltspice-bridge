@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -17,17 +18,20 @@ public class LTSpiceProcessTest {
 
     @Test
     public void shouldReturnAListWithTheCommands() {
-        File circuit = new File("C:\temp\test.net");
+        CircuitFile circuit = new CircuitFile(new File("C:\\temp\\test.net"), "C:\\temp\\test.net");
         ExecutableFile executableFile = mock(ExecutableFile.class);
         when(executableFile.getAbsolutePath()).thenReturn(EXPECTED_PATH);
 
-        LTSpiceProcess process = new LTSpiceProcess(executableFile, circuit);
+        ProcessCommandBuilderWin commandBuilder = new ProcessCommandBuilderWin();
 
-        List<String> commands = process.createProcessCommands(executableFile, circuit);
+        List<CommandLineSwitch> emptyList = Arrays.asList(new BatchModeFlag());
+
+        List<String> commands = commandBuilder.createProcessCommands(executableFile, circuit,
+                emptyList);
         assertEquals(EXPECTED_NUMBER_OF_COMMANDS, commands.size());
         assertEquals(EXPECTED_PATH, commands.get(0));
         assertEquals(BATCH_MODE_FLAG, commands.get(1));
-        assertEquals(circuit.getAbsolutePath(), commands.get(2));
+        assertEquals(circuit.getLtSpiceFolder(), commands.get(2));
     }
 
 }

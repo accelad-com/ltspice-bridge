@@ -1,11 +1,10 @@
 package com.accelad.automation.ltpsice.process;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +13,19 @@ public class LTSpiceProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger(LTSpiceProcess.class);
     private final ProcessBuilder processBuilder;
 
-    public LTSpiceProcess(ExecutableFile executableFile, File circuit) {
-        List<String> commands = createProcessCommands(executableFile, circuit);
+    public LTSpiceProcess(ExecutableFile executableFile, CircuitFile circuit) {
+
+        ProcessCommandBuilder commandBuilder;
+        if (SystemUtils.IS_OS_WINDOWS) {
+            commandBuilder = new ProcessCommandBuilderWin();
+        } else if (SystemUtils.IS_OS_LINUX) {
+            commandBuilder = new ProcessCommandBuilderLinux();
+        } else {
+            throw new RuntimeException("the system OS is not supported");
+        }
+
+        List<String> commands = commandBuilder.createProcessCommands(executableFile, circuit,
+                getCommandLineSwitches());
         processBuilder = new ProcessBuilder(commands);
         processBuilder.inheritIO();
     }
@@ -46,17 +56,4 @@ public class LTSpiceProcess {
     private List<CommandLineSwitch> getCommandLineSwitches() {
         return Arrays.asList(new BatchModeFlag());
     }
-
-    List<String> createProcessCommands(ExecutableFile executableFile, File circuit) {
-        List<String> commands = new ArrayList<>();
-        commands.add(executableFile.getAbsolutePath());
-
-        getCommandLineSwitches().stream()
-                .map(CommandLineSwitch::toString)
-                .forEach(commands::add);
-
-        commands.add(circuit.getAbsolutePath());
-        return commands;
-    }
-
 }

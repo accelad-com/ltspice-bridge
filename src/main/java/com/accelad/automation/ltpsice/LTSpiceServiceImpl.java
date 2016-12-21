@@ -49,13 +49,17 @@ public class LTSpiceServiceImpl implements LTSpiceService {
         Log log = executorResult.getLogFile()
                 .map(file -> readLogFile(logParser, file))
                 .orElse(new Log());
+        executorResult.getLogFile().ifPresent(File::delete);
 
         LTSpiceRawParser rawParser = new LTSpiceRawParser();
         LTSpiceRaw raw = executorResult.getRawFile()
                 .map(file -> readRawFile(rawParser, file))
                 .orElse(new LTSpiceRaw());
-
+        executorResult.getRawFile().ifPresent(File::delete);
+        
         LTSpiceState state = executorResult.getState();
+        
+        
         return new LTSpiceResult(state, raw, log);
 
     }

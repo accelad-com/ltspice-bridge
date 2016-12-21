@@ -20,6 +20,7 @@ public class LTSpiceServiceImplTest {
         LTSpiceService service = new LTSpiceServiceImpl();
 
         if (!service.isAvailable()) {
+        	System.err.println("The LTSpiceService is not available. This test can not run!");
             return;
         }
 

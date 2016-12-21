@@ -12,10 +12,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+import org.apache.commons.lang3.SystemUtils;
+
 public class LTSpiceExecutableFileLocator {
     private static final Logger LOGGER = Logger.getLogger(LTSpiceExecutableFileLocator.class.getName());
     private static final String LTSPICE_PATH = "ltspice_path";
-    private static final String LTSPICE_EXECUTABLE_NAME = "XVIIx86.exe";
+    private static final String LTSPICE_EXECUTABLE_NAME = "XVIIx??.exe";
     private final Preferences preferences;
     private final FileFinder finder;
 
@@ -35,10 +37,35 @@ public class LTSpiceExecutableFileLocator {
             return optionalExecutableFromPrefs;
         }
 
-        Optional<ExecutableFile> optionalExecutable = findExecutableInTheFullSystem();
-        optionalExecutable.ifPresent(this::savePathInPreferences);
+        if (SystemUtils.IS_OS_WINDOWS) {
+            Optional<ExecutableFile> optionalExecutable = findExecutableInTheFullSystem();
+            optionalExecutable.ifPresent(this::savePathInPreferences);
+            return optionalExecutable;
+        }
 
-        return optionalExecutable;
+        if (SystemUtils.IS_OS_LINUX) {
+            Optional<ExecutableFile> optionalExecutable = findExecutableinWineFolder();
+            optionalExecutable.ifPresent(this::savePathInPreferences);
+            return optionalExecutable;
+        }
+
+        return Optional.empty();
+
+    }
+
+    private Optional<ExecutableFile> findExecutableinWineFolder() {
+        try {
+            File driveCFolder = Wine.getDriveCFolder();
+
+            List<Path> paths = searchExecutableInTheGivenDrive(driveCFolder);
+
+            return paths.stream()
+                    .map(Path::toFile)
+                    .map(ExecutableFile::new)
+                    .findAny();
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 
     private void savePathInPreferences(ExecutableFile file) {

@@ -26,21 +26,15 @@ public class LTSpiceExecutor {
     }
 
     public ExecutorResult runSimulation(Netlist netlist) {
-        File circuitPath = null;
-        try {
-            circuitPath = File.createTempFile("circuit", ".net", TEMP_DIR);
-        } catch (IOException e1) {
-            LOGGER.error("Impossible to save the circuit on the drive", e1);
-            return new ExecutorResult(LTSpiceState.SIMULATION_FAILED);
-        }
-
+        CircuitFile circuitPath = getTempCircuitFile();
+        
         try {
             saveNetlistToFile(netlist, circuitPath);
             LTSpiceProcess process = new LTSpiceProcess(executable, circuitPath);
             LTSpiceState result = process.run();
 
             if (result == LTSpiceState.SIMULATION_OK) {
-                // circuitPath.delete();
+                circuitPath.delete();
             }
             else {
                 saveNetlistForDebug(netlist);
@@ -52,9 +46,35 @@ public class LTSpiceExecutor {
         return buildResult(LTSpiceState.SIMULATION_FAILED, circuitPath);
     }
 
-    private ExecutorResult buildResult(LTSpiceState result, File circuitFile) {
-        File logFile = getLogFile(circuitFile);
-        File rawFile = getRawFile(circuitFile);
+	private CircuitFile getTempCircuitFile() {
+
+        try {
+    		if (SystemUtils.IS_OS_WINDOWS) {
+    			
+                File file = File.createTempFile("circuit", ".net", TEMP_DIR);
+                return new CircuitFile(file, file.getAbsolutePath());
+    		}
+    		
+    		else if (SystemUtils.IS_OS_LINUX) {
+    			File driveCFolder = Wine.getDriveCFolder();
+    			File file = File.createTempFile("circuit", ".net", driveCFolder);
+    			return new CircuitFile(file, "C:\\\\"+file.getName());
+    		}
+    		
+    		else{
+    			throw new RuntimeException("this OS is not supported");
+    		}
+
+
+        } catch (IOException e1) {
+            LOGGER.error("Impossible to save the circuit on the drive", e1);
+        }
+		return null;
+	}
+
+    private ExecutorResult buildResult(LTSpiceState result, CircuitFile circuitFile) {
+        File logFile = getLogFile(circuitFile.getFile());
+        File rawFile = getRawFile(circuitFile.getFile());
         return new ExecutorResult(result, logFile, rawFile);
     }
 
@@ -70,12 +90,13 @@ public class LTSpiceExecutor {
 
     private void saveNetlistForDebug(Netlist netlist) throws IOException {
         File debugNetlistFile = new File(TEMP_DIR, CIRCUIT_FILE_NAME);
-        saveNetlistToFile(netlist, debugNetlistFile);
+        CircuitFile circuitFile = new CircuitFile(debugNetlistFile, debugNetlistFile.getAbsolutePath());
+        saveNetlistToFile(netlist, circuitFile);
         LOGGER.warn("Unable to simulate the circuit : " + debugNetlistFile.getAbsolutePath());
     }
 
-    private void saveNetlistToFile(Netlist netlist, File circuitPath) throws IOException {
-        FileWriter fileWriter = new FileWriter(circuitPath);
+    private void saveNetlistToFile(Netlist netlist, CircuitFile circuitPath) throws IOException {
+        FileWriter fileWriter = new FileWriter(circuitPath.getFile());
         NetlistWriter netlistWriter = new NetlistWriter();
         netlistWriter.write(netlist, fileWriter);
         fileWriter.close();
