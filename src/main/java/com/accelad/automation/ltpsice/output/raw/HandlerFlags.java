@@ -1,5 +1,7 @@
 package com.accelad.automation.ltpsice.output.raw;
 
+import java.util.Arrays;
+
 import com.accelad.automation.ltpsice.output.raw.LTSpiceRaw.Builder;
 class HandlerFlags extends RawLineHandler {
     private static final String FLAGS_HEADER = "Flags: ";
@@ -12,9 +14,16 @@ class HandlerFlags extends RawLineHandler {
     @Override
     public boolean operationSpec(String line) {
         if (line.startsWith(FLAGS_HEADER)) {
-            String flagTxtValue = line.substring(FLAGS_HEADER.length());
-            Flag flag = Flag.valueOf(flagTxtValue.toUpperCase());
-            builder.withFlags(new ListOfFlags(flag));
+            String flagsString = line.substring(FLAGS_HEADER.length());
+            String[] flagNamesArray = flagsString.split(" ");
+
+            ListOfFlags listOfFlags = new ListOfFlags();
+            Arrays.stream(flagNamesArray)
+                    .map(String::toUpperCase)
+                    .map(Flag::valueOf)
+                    .forEach(listOfFlags::add);
+
+            builder.withFlags(listOfFlags);
             return true;
         }
 
