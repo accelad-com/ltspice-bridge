@@ -42,43 +42,55 @@ public class LTSpiceServiceImpl implements LTSpiceService {
 
     @Override
     public LTSpiceResult runSimulation(Netlist netlist) throws LTSpiceException {
+        return runSimulation(netlist, true);
+    }
+
+    @Override
+    public LTSpiceResult runSimulation(Netlist netlist, boolean withTraces)
+            throws LTSpiceException {
         LTSpiceExecutor executorInstance = executorProvider.getExecutor();
         ExecutorResult executorResult = executorInstance.runSimulation(netlist);
-        LogParser logParser = new LogParser();
 
         Log log = executorResult.getLogFile()
-                .map(file -> readLogFile(logParser, file))
+                .map(this::readLogFile)
                 .orElse(new Log());
-        executorResult.getLogFile().ifPresent(File::delete);
 
-        LTSpiceRawParser rawParser = new LTSpiceRawParser();
-        LTSpiceRaw raw = executorResult.getRawFile()
-                .map(file -> readRawFile(rawParser, file))
-                .orElse(new LTSpiceRaw());
-        executorResult.getRawFile().ifPresent(File::delete);
+        LTSpiceRaw raw;
+        if (withTraces) {
+            raw = executorResult.getRawFile()
+                    .map(this::readRawFile)
+                    .orElse(new LTSpiceRaw());
+
+        } else {
+            raw = new LTSpiceRaw();
+        }
         
         LTSpiceState state = executorResult.getState();
         
+        executorResult.getLogFile().ifPresent(File::delete);
+        executorResult.getRawFile().ifPresent(File::delete);
         
         return new LTSpiceResult(state, raw, log);
 
     }
 
-    private LTSpiceRaw readRawFile(LTSpiceRawParser rawParser, File file) {
+    private LTSpiceRaw readRawFile(File file) {
+        LTSpiceRawParser rawParser = new LTSpiceRawParser();
         try {
             return rawParser.read(new FileInputStream(file));
         } catch (IOException e) {
             LOGGER.warn("Impossible to open raw file", e);
-            return null;
+            return new LTSpiceRaw();
         }
     }
 
-    private Log readLogFile(LogParser logParser, File file) {
+    private Log readLogFile(File file) {
+        LogParser logParser = new LogParser();
         try {
             return logParser.read(new FileInputStream(file));
         } catch (IOException e) {
             LOGGER.warn("Impossible to open log file", e);
-            return null;
+            return new Log();
         }
     }
 

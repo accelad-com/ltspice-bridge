@@ -8,4 +8,6 @@ public interface LTSpiceService {
 
     public LTSpiceResult runSimulation(Netlist netlist) throws LTSpiceException;
 
+    public LTSpiceResult runSimulation(Netlist netlist, boolean withTraces) throws LTSpiceException;
+
 }
