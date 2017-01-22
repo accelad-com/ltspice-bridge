@@ -23,7 +23,16 @@ public class LTSpiceExecutableFileLocator {
 
     public LTSpiceExecutableFileLocator() {
         this(new FileFinder(LTSPICE_EXECUTABLE_NAME),
-                Preferences.userNodeForPackage(LTSpiceExecutableFileLocator.class));
+                getPreferences());
+    }
+
+    private static Preferences getPreferences() {
+        try {
+            return Preferences.userNodeForPackage(LTSpiceExecutableFileLocator.class);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Impossible to have access to user preferences", e);
+            throw new RuntimeException("Impossible to have access to user preferences");
+        }
     }
 
     public LTSpiceExecutableFileLocator(FileFinder finder, Preferences preferences) {
