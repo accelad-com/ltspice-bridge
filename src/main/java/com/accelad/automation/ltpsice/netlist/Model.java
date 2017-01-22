@@ -1,20 +1,22 @@
 package com.accelad.automation.ltpsice.netlist;
 
+import com.accelad.automation.ltpsice.netlist.directives.ModelName;
+
 public class Model {
 
-    private final String value;
+    private final ModelName value;
 
-    public Model(String value) {
+    public Model(ModelName value) {
         this.value = value;
     }
 
-    public String getValue() {
+    public ModelName getValue() {
         return value;
     }
 
     @Override
     public String toString() {
-        return value;
+        return value.toString();
     }
 
     @Override

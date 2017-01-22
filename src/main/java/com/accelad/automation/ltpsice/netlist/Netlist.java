@@ -2,6 +2,7 @@ package com.accelad.automation.ltpsice.netlist;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.accelad.automation.ltpsice.netlist.directives.Directive;
 import com.accelad.automation.ltpsice.netlist.element.Element;
@@ -9,8 +10,8 @@ import com.accelad.automation.ltpsice.netlist.element.Element;
 public class Netlist {
 
     private Title title = new Title("");
-    private List<Element> elements = new ArrayList<>();
-    private List<Subcircuit> subcircuits = new ArrayList<>();
+    private ElementCollection elements = new ElementCollection();
+    private SubcircuitCollection subcircuitCollection = new SubcircuitCollection();
     private List<Directive> directives = new ArrayList<>();
 
     public Title getTitle() {
@@ -21,7 +22,7 @@ public class Netlist {
         this.title = title;
     }
 
-    public List<Element> getElements() {
+    public ElementCollection getElements() {
         return elements;
     }
 
@@ -33,16 +34,20 @@ public class Netlist {
         elements.remove(o);
     }
 
-    public List<Subcircuit> getSubcircuits() {
-        return subcircuits;
+    public SubcircuitCollection getSubcircuits() {
+        return subcircuitCollection;
     }
 
     public boolean addSubcircuit(Subcircuit e) {
-        return subcircuits.add(e);
+        return subcircuitCollection.add(e);
     }
 
     public boolean removeSubCircuit(Subcircuit o) {
-        return subcircuits.remove(o);
+        return subcircuitCollection.remove(o);
+    }
+
+    public Optional<Subcircuit> findSubcircuit(String name) {
+        return subcircuitCollection.findSubcircuit(name);
     }
 
     public boolean addDirective(Directive e) {

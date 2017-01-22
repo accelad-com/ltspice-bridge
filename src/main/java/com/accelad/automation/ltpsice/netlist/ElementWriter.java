@@ -52,13 +52,13 @@ public class ElementWriter implements ElementVisitor {
     @Override
     public void visit(BipolarJunctionTransistor c) {
         formattedText = formatThreeNodeElement('Q', c.getInstanceName(), c.getCollector(),
-                c.getBase(), c.getEmitter(), c.getModel().getValue());
+                c.getBase(), c.getEmitter(), c.getModel().getValue().toString());
     }
 
     @Override
     public void visit(Mosfet c) {
         formattedText = formatThreeNodeElement('M', c.getInstanceName(), c.getDrain(),
-                c.getGate(), c.getSource(), c.getModel().getValue());
+                c.getGate(), c.getSource(), c.getModel().getValue().toString());
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ElementWriter implements ElementVisitor {
     @Override
     public void visit(Diode c) {
         formattedText = formatTwoNodeElement('D', c.getInstanceName(), c.getAnode(),
-                c.getCathode(), c.getModel().getValue());
+                c.getCathode(), c.getModel().getValue().toString());
     }
 
     @Override

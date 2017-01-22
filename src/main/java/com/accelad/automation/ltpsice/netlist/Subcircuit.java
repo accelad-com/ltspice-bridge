@@ -9,7 +9,7 @@ public class Subcircuit {
 
     private final String name;
     private final List<Node> nodes;
-    private final List<Element> elements;
+    private final ElementCollection elements = new ElementCollection();
     private final List<Directive> directives;
 
 
@@ -17,7 +17,7 @@ public class Subcircuit {
             List<Directive> directives) {
         this.name = name;
         this.nodes = nodes;
-        this.elements = elements;
+        this.elements.addAll(elements);
         this.directives = directives;
     }
 
@@ -29,7 +29,7 @@ public class Subcircuit {
         return nodes;
     }
 
-    public List<Element> getElements() {
+    public ElementCollection getElements() {
         return elements;
     }
 
