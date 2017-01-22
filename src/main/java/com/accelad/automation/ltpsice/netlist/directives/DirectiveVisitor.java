@@ -13,4 +13,6 @@ public interface DirectiveVisitor {
 
     public void visit(Library library);
 
+    public void visit(ModelDirective modelDirective);
+
 }

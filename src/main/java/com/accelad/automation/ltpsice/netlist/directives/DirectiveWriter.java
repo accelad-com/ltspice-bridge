@@ -57,4 +57,52 @@ public class DirectiveWriter implements DirectiveVisitor {
         text = ".LIB" + " " + library.getPath();
     }
 
+    @Override
+    public void visit(ModelDirective model) {
+        String modelName = model.getModelName().toString();
+        String type = convert(model.getModelType());
+        String value = model.getValue().getValue();
+        text = ".MODEL" + SEPARATOR + modelName + SEPARATOR + type + value;
+    }
+
+    private String convert(ModelType type) {
+        switch (type) {
+
+        case VoltageControlledSwitch:
+            return "SW";
+        case CurrentControlledSwitch:
+            return "CSW";
+        case UniformDistributedRCLine:
+            return "URC";
+        case LossyTransmissionLine:
+            return "LTRA";
+        case Diode:
+            return "D";
+        case NPNBipolarTransistor:
+            return "NPN";
+        case PNPBipolarTransistor:
+            return "PNP";
+        case NchannelJFET:
+            return "NJF";
+        case PchannelJFET:
+            return "PJF";
+        case NchannelMOSFET:
+            return "NMOS";
+        case PchannelMOSFET:
+            return "PMOS";
+        case NchannelMESFET:
+            return "NMF";
+        case PchannelMESFET:
+            return "PMF";
+        case NchannelIGBT:
+            return "NIGBT";
+        case PchannelIGBT:
+            return "PIGBT";
+        case VerticalDoubleDiffusedPowerMOSFET:
+            return "VDMOS";
+        }
+        return "";
+
+    }
+
 }
