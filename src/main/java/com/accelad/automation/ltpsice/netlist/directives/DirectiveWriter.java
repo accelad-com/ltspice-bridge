@@ -1,5 +1,7 @@
 package com.accelad.automation.ltpsice.netlist.directives;
 
+import java.util.Iterator;
+
 public class DirectiveWriter implements DirectiveVisitor {
 
     private static final String SEPARATOR = " ";
@@ -19,12 +21,15 @@ public class DirectiveWriter implements DirectiveVisitor {
         StringBuilder builder = new StringBuilder();
         builder.append(".FUNC" + SEPARATOR + function.getName() + "(");
 
-        for (int i = 0; i < function.getParameters().size(); i++) {
-            builder.append(function.getParameters().get(i));
-            if (i != function.getParameters().size() - 1) {
+        Iterator<Parameter> iterator = function.getParameters().iterator();
+        while (iterator.hasNext()) {
+            Parameter parameter = iterator.next();
+            builder.append(parameter);
+            if (iterator.hasNext()) {
                 builder.append(",");
             }
         }
+
         builder.append(")" + SEPARATOR + function.getValue().getValue());
         text = builder.toString();
     }
