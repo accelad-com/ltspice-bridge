@@ -13,7 +13,12 @@ class HandlerMeasure extends LogLineHandler {
             String[] parameters = line.split(" ");
             String name = parameters[0].substring(0, parameters[0].length() - 1);
             String definition = parameters[0].split("=")[0];
-            double value = Double.parseDouble(parameters[1].split("=")[1]);
+            double value;
+            try {
+                value = Double.parseDouble(parameters[1].split("=")[1]);
+            } catch (NumberFormatException e) {
+                value = Double.NaN;
+            }
 
             Measure measure = new Measure(name, definition, value);
             log.addMeasure(measure);
