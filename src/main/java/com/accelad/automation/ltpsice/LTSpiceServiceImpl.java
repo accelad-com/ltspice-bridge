@@ -77,7 +77,10 @@ public class LTSpiceServiceImpl implements LTSpiceService {
     private LTSpiceRaw readRawFile(File file) {
         LTSpiceRawParser rawParser = new LTSpiceRawParser();
         try {
-            return rawParser.read(new FileInputStream(file));
+            FileInputStream is = new FileInputStream(file);
+            LTSpiceRaw raw = rawParser.read(is);
+            is.close();
+            return raw;
         } catch (IOException e) {
             LOGGER.warn("Impossible to open raw file", e);
             return new LTSpiceRaw();
@@ -87,7 +90,10 @@ public class LTSpiceServiceImpl implements LTSpiceService {
     private Log readLogFile(File file) {
         LogParser logParser = new LogParser();
         try {
-            return logParser.read(new FileInputStream(file));
+            FileInputStream stream = new FileInputStream(file);
+            Log log = logParser.read(stream);
+            stream.close();
+            return log;
         } catch (IOException e) {
             LOGGER.warn("Impossible to open log file", e);
             return new Log();
