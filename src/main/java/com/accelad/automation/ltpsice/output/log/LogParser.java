@@ -9,10 +9,8 @@ import java.nio.charset.Charset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.accelad.automation.ltpsice.output.raw.LTSpiceRawParser;
-
 public class LogParser {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LTSpiceRawParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogParser.class);
 
 
 
@@ -62,6 +60,7 @@ public class LogParser {
         handler = handler.setNext(new HandlerSkipOperatingPoint(log));
         handler = handler.setNext(new HandlerMeasure(log));
         handler = handler.setNext(new HandlerThreadVector(log));
+        handler = handler.setNext(new HandlerChangeTseed());
         handler.setNext(new HandlerGminStepping(log, reader));
         return firsthandler;
     }
